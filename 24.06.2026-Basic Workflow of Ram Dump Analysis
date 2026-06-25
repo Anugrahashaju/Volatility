@@ -1,0 +1,289 @@
+# Basic Workflow of RAM Dump Analysis
+
+## Introduction
+
+Memory forensics is the process of analyzing a computer's volatile memory (RAM) to identify running processes, network connections, loaded modules, user activities, and potential malicious artifacts. RAM analysis is crucial because important evidence may exist only in memory and disappear once the system is shut down.
+
+This document outlines the basic workflow followed during RAM dump analysis using the Volatility Framework.
+
+---
+
+# Workflow of RAM Dump Analysis
+
+## Step 1: Memory Acquisition
+
+The first step in memory forensics is collecting a RAM dump from the target system.
+
+### Purpose
+
+* Preserve volatile evidence.
+* Capture running processes and system state.
+* Collect information that may not be stored on disk.
+
+### Tools
+
+* Magnet RAM Capture
+* FTK Imager
+* Belkasoft RAM Capturer
+* DumpIt
+
+### Output
+
+A memory image file, typically with extensions such as:
+
+* `.raw`
+* `.mem`
+* `.dmp`
+
+---
+
+## Step 2: Identify Memory Image Information
+
+Before analysis, determine the operating system and memory profile.
+
+### Purpose
+
+* Identify the operating system.
+* Verify the memory image is valid.
+* Prepare the correct analysis approach.
+
+### Volatility Commands
+
+```bash
+windows.info
+```
+
+Information obtained:
+
+* OS Version
+* Kernel Information
+* System Architecture
+* Memory Layer Details
+
+---
+
+## Step 3: Enumerate Running Processes
+
+Identify all processes that were running when the memory dump was captured.
+
+### PSList
+
+Displays active processes linked within the operating system.
+
+```bash
+windows.pslist
+```
+
+Provides:
+
+* Process Name
+* PID
+* PPID
+* Creation Time
+* Number of Threads
+
+### PSScan
+
+Scans memory directly for process structures.
+
+```bash
+windows.psscan
+```
+
+Purpose:
+
+* Detect hidden processes.
+* Find terminated processes.
+* Identify malware attempting to hide itself.
+
+---
+
+## Step 4: Verify Parent-Child Process Relationships
+
+Analyze how processes were launched.
+
+### Purpose
+
+* Detect abnormal process trees.
+* Identify suspicious parent-child relationships.
+
+Examples of suspicious activity:
+
+* Command Prompt launched by a browser.
+* PowerShell launched by Microsoft Word.
+* Unknown processes spawned by system processes.
+
+---
+
+## Step 5: Examine Process Command Lines
+
+View commands used to start processes.
+
+### Command
+
+```bash
+windows.cmdline
+```
+
+Purpose:
+
+* Identify executed commands.
+* Detect malicious scripts.
+* Discover encoded PowerShell commands.
+
+---
+
+## Step 6: Analyze Loaded DLLs and Modules
+
+Inspect libraries loaded into memory.
+
+### Commands
+
+```bash
+windows.dlllist
+```
+
+Purpose:
+
+* Detect DLL injection.
+* Identify unusual libraries.
+* Investigate malware persistence.
+
+---
+
+## Step 7: Investigate Network Connections
+
+Check network activity associated with processes.
+
+### Command
+
+```bash
+windows.netscan
+```
+
+Purpose:
+
+* Find active connections.
+* Identify suspicious IP addresses.
+* Correlate network activity with running processes.
+
+---
+
+## Step 8: Review User Activity
+
+Look for evidence of user actions.
+
+Examples:
+
+* Browser activity
+* Open files
+* Clipboard contents
+* Command history
+
+Useful Plugins:
+
+```bash
+windows.consoles
+windows.clipboard
+```
+
+---
+
+## Step 9: Search for Indicators of Compromise (IOCs)
+
+Look for signs of malicious activity.
+
+Examples:
+
+* Unknown processes
+* Hidden processes
+* Suspicious command lines
+* Unusual network connections
+* Injected DLLs
+* Encoded scripts
+
+---
+
+## Step 10: Extract Evidence
+
+Dump relevant artifacts for deeper analysis.
+
+Examples:
+
+* Process Memory
+* DLL Files
+* Executables
+
+Commands:
+
+```bash
+windows.memmap
+windows.dumpfiles
+windows.pslist
+```
+
+---
+
+## Step 11: Correlate Findings
+
+Combine information from:
+
+* Processes
+* Network connections
+* Command history
+* Loaded DLLs
+* User activity
+
+Goal:
+
+* Build a timeline of events.
+* Determine what occurred on the system.
+* Identify potential threats.
+
+---
+
+## Basic Analysis Flow Diagram
+
+```text
+RAM Acquisition
+      │
+      ▼
+Load Memory Dump
+      │
+      ▼
+Identify System Information
+      │
+      ▼
+Process Enumeration
+(pslist / psscan)
+      │
+      ▼
+Analyze Process Relationships
+      │
+      ▼
+Check Command Lines
+      │
+      ▼
+Inspect DLLs and Modules
+      │
+      ▼
+Analyze Network Connections
+      │
+      ▼
+Review User Activity
+      │
+      ▼
+Search for Indicators of Compromise
+      │
+      ▼
+Extract Evidence
+      │
+      ▼
+Generate Investigation Report
+```
+
+---
+
+## Conclusion
+
+RAM dump analysis is a critical component of digital forensics and incident response. By following a structured workflow, investigators can identify running processes, detect suspicious activity, analyze network connections, recover volatile evidence, and reconstruct events that occurred on a system. Tools such as Volatility enable forensic analysts to systematically examine memory images and uncover evidence that may not exist on disk.
