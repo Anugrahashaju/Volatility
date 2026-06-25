@@ -1,0 +1,97 @@
+# Memory Dump Analysis using Volatility Workbench
+
+## Overview
+
+Today, we installed **Volatility Workbench** for memory forensic analysis and learned the basic workflow of analyzing RAM dump files. We also used **Magnet RAM Capture** (Magnet Forensics) to perform memory acquisition from a running system.
+
+As part of the practical session, our guide introduced us to the fundamentals of memory forensics by analyzing a sample memory dump obtained from the Volatility training resources.
+
+## Tools Used
+
+### 1. Volatility Workbench
+
+Volatility Workbench is a graphical interface that simplifies the use of the Volatility Framework for memory forensic investigations. It helps investigators analyze RAM dumps and extract useful forensic artifacts.
+
+### 2. Magnet RAM Capture
+
+Magnet RAM Capture is a lightweight memory acquisition tool developed by Magnet Forensics. It is used to collect the contents of a system's volatile memory (RAM) for forensic analysis.
+
+## Objectives
+
+* Install and configure Volatility Workbench.
+* Understand the process of memory acquisition.
+* Learn how to analyze memory dump files.
+* Identify running processes within a memory image.
+* Perform basic forensic analysis using Volatility plugins.
+
+## Procedure
+
+### Step 1: Memory Acquisition
+
+A memory dump was collected using Magnet RAM Capture. This process captures the contents of the system's RAM for later forensic investigation.
+
+### Step 2: Loading the Memory Dump
+
+The collected memory dump was loaded into Volatility Workbench for analysis.
+
+### Step 3: Process Enumeration
+
+#### PSList Analysis
+
+The `pslist` plugin was executed to view active processes present in the memory image.
+
+Purpose:
+
+* Displays processes linked in the active process list.
+* Shows process information such as:
+
+  * Process Name
+  * Process ID (PID)
+  * Parent Process ID (PPID)
+  * Thread Count
+  * Handle Count
+  * Creation Time
+
+Command Used:
+
+```bash
+windows.pslist
+```
+
+#### PSScan Analysis
+
+The `psscan` plugin was executed to scan memory structures directly and identify processes.
+
+Purpose:
+
+* Detect hidden or terminated processes.
+* Find processes not visible through normal process enumeration.
+* Assist in malware and rootkit investigations.
+
+Command Used:
+
+```bash
+windows.psscan
+```
+
+## Observations
+
+* Successfully installed Volatility Workbench.
+* Acquired a RAM dump using Magnet RAM Capture.
+* Loaded a sample memory image from the Volatility training resources.
+* Performed process analysis using `pslist` and `psscan`.
+* Observed running processes and compared results from both plugins.
+* Learned the importance of cross-verifying process information during memory forensic investigations.
+
+## Conclusion
+
+This practical session introduced the fundamentals of memory forensics. Using Magnet RAM Capture and Volatility Workbench, we successfully collected and analyzed a memory dump. The `pslist` and `psscan` plugins helped us understand how processes are represented in memory and how forensic investigators identify active, hidden, or terminated processes during an investigation.
+
+## Future Work
+
+* Analyze process command lines (`cmdline`).
+* Investigate network connections.
+* Extract browser artifacts.
+* Analyze DLLs and handles.
+* Detect suspicious or malicious processes.
+* Perform advanced memory forensic investigations using additional Volatility plugins.
